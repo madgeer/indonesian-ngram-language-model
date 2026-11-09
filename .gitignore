@@ -1,0 +1,5 @@
+__pycache__/
+report2.md
+*.txt
+*.pkl
+idwiki-latest-pages-articles.xml

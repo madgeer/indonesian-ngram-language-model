@@ -1,0 +1,2 @@
+# Proyek ini hanya memakai standard library Python (Python 3.9+).
+# Tidak ada dependensi eksternal yang perlu dipasang.

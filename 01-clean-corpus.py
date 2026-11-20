@@ -1,3 +1,11 @@
+"""Bersihkan dump Wikipedia, lalu split korpus menjadi train/test.
+
+Contoh pemakaian:
+    python 01-clean-corpus.py
+    python 01-clean-corpus.py --xml idwiki-latest-pages-articles.xml --sample-rate 0.05
+"""
+
+import argparse
 import xml.etree.ElementTree as ET
 import re
 import random
@@ -18,7 +26,7 @@ def clean_wikitext(text):
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
-def process_and_split_corpus(xml_path, sample_rate=0.20, train_ratio=0.8):
+def process_and_split_corpus(xml_path, sample_rate=0.05, train_ratio=0.8):
     start_time = time.time()
     extracted_lines = []
     
@@ -58,5 +66,30 @@ def process_and_split_corpus(xml_path, sample_rate=0.20, train_ratio=0.8):
     print(f"[✓] Pemisahan Dataset Selesai ({time.time() - start_time:.2f}s)")
 
 if __name__ == "__main__":
-    # Ganti 'korpus.xml' sesuai file XML-mu
-    process_and_split_corpus("idwiki-latest-pages-articles.xml", sample_rate=0.05, train_ratio=0.80)
+    parser = argparse.ArgumentParser(
+        description="Bersihkan dump Wikipedia dan split korpus menjadi train/test."
+    )
+    parser.add_argument(
+        "--xml",
+        default="idwiki-latest-pages-articles.xml",
+        help="Path ke dump XML Wikipedia (default: idwiki-latest-pages-articles.xml).",
+    )
+    parser.add_argument(
+        "--sample-rate",
+        type=float,
+        default=0.05,
+        help="Proporsi artikel yang diambil, 0-1 (default: 0.05).",
+    )
+    parser.add_argument(
+        "--train-ratio",
+        type=float,
+        default=0.80,
+        help="Proporsi data train, 0-1 (default: 0.80).",
+    )
+    args = parser.parse_args()
+
+    process_and_split_corpus(
+        args.xml,
+        sample_rate=args.sample_rate,
+        train_ratio=args.train_ratio,
+    )

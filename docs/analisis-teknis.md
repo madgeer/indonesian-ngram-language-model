@@ -1,6 +1,6 @@
 # Laporan Eksperimen Language Model N-Gram pada Korpus Wikipedia Bahasa Indonesia
 
-**Lokasi artefak:** `D:\Kuliah\semester 5\nlp\n-gram`
+**Repositori:** `tugas-n-gram`
 **Dataset:** `idwiki-latest-pages-articles.xml` (dump Wikipedia bahasa Indonesia)
 **Model:** 9 model hasil training (`N = 2, 3, 4` × `Laplace, Add-k, Kneser-Ney`)
 **Tanggal analisis:** 6 November 2026
@@ -31,7 +31,7 @@ Eksperimen berhasil membangun 9 model bahasa n-gram dari korpus Wikipedia bahasa
 
 ### 1.2 Dataset
 
-Korpus berasal dari dump `idwiki-latest-pages-articles.xml` berukuran sekitar **5,93 GB**. Pemrosesan dilakukan dengan sampling **5%** artikel (parameter `sample_rate=0.05` pada pemanggilan `__main__`, meskipun nilai default fungsi adalah `0,20`).
+Korpus berasal dari dump `idwiki-latest-pages-articles.xml` berukuran sekitar **5,93 GB**. Pemrosesan dilakukan dengan sampling **5%** artikel (parameter `sample_rate=0.05`, dapat diubah lewat argumen `--sample-rate`).
 
 | Properti | Data Train | Data Test |
 |---|---:|---:|
@@ -125,7 +125,7 @@ from 01_run_experiments import ComprehensiveNGram
 
 Selain `SyntaxError` akibat nama modul diawali angka, nama file yang diimpor juga salah (seharusnya `02_run_experiments.py`, bukan `01_run_experiments.py`). Perbaikan yang diterapkan: modul `02_run_experiments` dimuat dengan `importlib`, lalu kelasnya didaftarkan ke `__main__` agar `.pkl` dapat di-unpickle. Ditambahkan pula `sys.stdout.reconfigure(encoding="utf-8")` agar karakter `✓` tidak memicu `UnicodeEncodeError` di konsol Windows.
 
-Demo saat ini masih memakai `N=3, KN`. Hasil eksperimen menunjukkan model terbaik adalah `N=2, KN`, sehingga `N_DEMO` dapat diubah menjadi `2` bila ingin demo memakai model terbaik.
+Demo saat ini sudah dikonfigurasi memakai model terbaik, yaitu `N=2, KN` (`N_DEMO = 2`).
 
 ### 1.4 Konfigurasi Model
 
@@ -396,7 +396,7 @@ N=2 KN adalah pilihan paling masuk akal secara biaya-manfaat: kualitas terbaik, 
 4. **Tidak ada validation set** dan tidak ada tuning hyperparameter. Nilai `k=0,01` dan `d=0,75` ditetapkan tetap, bukan hasil pencarian.
 5. **Tidak ada token `<UNK>`** dan tidak ada strategi penanganan OOV yang eksplisit.
 6. **Tidak ada pencatatan metrik terstruktur.** Waktu training, konfigurasi, dan hasil PPL tidak disimpan otomatis ke JSON/CSV, sehingga reproduksibilitas bergantung pada file `.pkl`.
-7. **Skrip 03 dan 04 sempat tidak dapat dijalankan** karena `SyntaxError` pada nama modul yang diawali angka. Keduanya sudah diperbaiki dengan `importlib`. Namun `04_inference_demo.py` masih meng-hardcode N=3 KN, padahal hasil menunjukkan N=2 KN adalah model terbaik.
+7. **Skrip 03 dan 04 sempat tidak dapat dijalankan** karena `SyntaxError` pada nama modul yang diawali angka. Keduanya sudah diperbaiki dengan `importlib`, dan `04_inference_demo.py` sudah memakai model terbaik (`N=2, KN`).
 8. **PPL hanya metrik intrinsik.** Tidak ada evaluasi downstream (klasifikasi, terjemahan, generasi, dsb.), sehingga belum diketahui apakah perbedaan PPL berdampak pada tugas nyata.
 9. **PPL absolut tinggi** (±1.000) untuk ukuran model bahasa praktis. Ini wajar untuk korpus 5% dengan kosakata 472 ribu dan tanpa neural smoothing, tetapi perlu ditekankan agar hasil tidak disalahartikan sebagai model siap pakai.
 
@@ -415,7 +415,7 @@ ComprehensiveNGram = _core.ComprehensiveNGram
 sys.modules["__main__"].ComprehensiveNGram = ComprehensiveNGram
 ```
 
-Langkah lanjutan yang disarankan adalah mengubah `N_DEMO` pada `04_inference_demo.py` menjadi `2` agar demo memakai model terbaik (`N=2, KN`).
+`04_inference_demo.py` sudah dikonfigurasi memakai model terbaik (`N=2, KN`) melalui `N_DEMO = 2`.
 
 ---
 
@@ -435,7 +435,7 @@ Langkah lanjutan yang disarankan adalah mengubah `N_DEMO` pada `04_inference_dem
 
 ### Rekomendasi
 
-1. **Pertahankan impor berbasis `importlib`** pada `03` dan `04` (sudah diterapkan), lalu ubah `N_DEMO` pada `04` menjadi `2` agar demo memakai model terbaik.
+1. **Pertahankan impor berbasis `importlib`** pada `03` dan `04` (sudah diterapkan). Demo sudah memakai model terbaik (`N=2, KN`).
 2. **Implementasikan KN rekursif penuh** dengan backoff trigram → bigram → unigram, lalu bandingkan ulang N=2 vs N=3 vs N=4. Dengan backoff yang benar, trigram berpotensi mengungguli bigram.
 3. **Tambahkan token `<UNK>` dan vocabulary pruning** (misalnya kata dengan frekuensi ≥ 2) untuk mengurangi `V`, memperbaiki smoothing, dan menekan ukuran model.
 4. **Gunakan validation set** untuk mencari `k` dan `d` secara empiris, bukan menetapkan `0,01` dan `0,75` secara tetap.

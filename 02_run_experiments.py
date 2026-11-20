@@ -1,3 +1,8 @@
+"""Latih model N-Gram (N=2,3,4) dengan Laplace, Add-k, dan Kneser-Ney.
+
+Model disimpan sebagai ngram_model_N{n}_{smoothing}.pkl di direktori kerja.
+"""
+
 import re
 from collections import Counter
 import math

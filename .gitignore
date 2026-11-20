@@ -1,5 +1,23 @@
+# Python
 __pycache__/
-report2.md
-*.txt
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# IDE dan OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dataset dan artefak model (ukuran besar, tidak di-commit)
+*.xml
 *.pkl
-idwiki-latest-pages-articles.xml
+*.txt
+!requirements.txt
+
+# Output sementara
+*.log

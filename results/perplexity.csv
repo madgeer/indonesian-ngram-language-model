@@ -1,0 +1,10 @@
+n,smoothing,perplexity
+2,laplace,40036.65
+2,add_k,4947.80
+2,kn,1042.72
+3,laplace,158628.63
+3,add_k,43225.03
+3,kn,1622.97
+4,laplace,229838.58
+4,add_k,111013.48
+4,kn,2826.02

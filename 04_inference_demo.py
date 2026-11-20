@@ -1,3 +1,5 @@
+"""Demo inferensi interaktif: perplexity kalimat dan prediksi kata berikutnya."""
+
 import re
 import math
 import time
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     
     if not os.path.exists(MODEL_FILE):
         print(f"[!] Model '{MODEL_FILE}' belum ada. Jalankan 02_run_experiments.py dulu!")
-        exit()
+        sys.exit(1)
 
     t0 = time.time()
     print(f"[*] Memuat model '{MODEL_FILE}' ke memori...")
